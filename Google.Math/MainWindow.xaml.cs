@@ -97,6 +97,15 @@ namespace Google.Math
             if (default_action != null) default_action();
         }
 
+        private string PreProcessText(string text)
+        {
+            text = text.Replace(@"\land", @"\wedge");
+            text = text.Replace(@"\lor", @"\vee");
+            text = text.Replace(@"\lnot", @"\neg");
+
+            return text;
+        }
+
         private void NewCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             ConfirmToSaveFileThen(() =>
@@ -181,12 +190,27 @@ namespace Google.Math
 
         private void CopyAsHatenaSyntaxCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Clipboard.SetText(string.Format("[tex:{0}]", CurrentText));
+
+            try
+            {
+                Clipboard.SetText(string.Format("[tex:{0}]", PreProcessText(CurrentText)));
+            }
+            catch (Exception exception)
+            {
+                textBlockError.Text = exception.Message;
+            }
         }
 
         private void FileCopyAsImageFileCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Clipboard.SetImage(imageFormula.Source as BitmapImage);
+            try
+            {
+                Clipboard.SetImage(imageFormula.Source as BitmapImage);
+            }
+            catch (Exception exception)
+            {
+                textBlockError.Text = exception.Message;
+            }
         }
 
         private void ExportAsImageFileCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -289,14 +313,9 @@ namespace Google.Math
 
         private void RefreshCommandBinding_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            var text = textBoxFormula.Text;
-            text = text.Replace(@"\land", @"\wedge");
-            text = text.Replace(@"\lor", @"\vee");
-            text = text.Replace(@"\lnot", @"\neg");
-
             const string API_URL = "http://chart.apis.google.com/chart?cht={0}&chl={1}";
             var cht = "tx";
-            var chl = WebUtility.UrlEncode(text);
+            var chl = WebUtility.UrlEncode(PreProcessText(CurrentText));
 
             try
             {
