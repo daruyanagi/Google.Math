@@ -1,0 +1,119 @@
+﻿<Window x:Class="Google.Math.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ns="clr-namespace:Google.Math"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.CommandBindings>
+        <CommandBinding Command="New" Executed="NewCommandBinding_Executed" />
+        <CommandBinding Command="Open" Executed="OpenCommandBinding_Executed" />
+        <CommandBinding Command="Save" Executed="SaveCommandBinding_Executed" CanExecute="SaveCommandBinding_CanExecute" />
+        <CommandBinding Command="SaveAs" Executed="SaveAsCommandBinding_Executed" />
+        <CommandBinding Command="{x:Static ns:MainWindow.FileCopyAsHatenaSyntaxCommand}" Executed="CopyAsHatenaSyntaxCommandBinding_Executed" />
+        <CommandBinding Command="{x:Static ns:MainWindow.FileCopyAsImageFileCommand}" Executed="FileCopyAsImageFileCommandBinding_Executed" />
+        <CommandBinding Command="{x:Static ns:MainWindow.FileExportAsImageFileCommand}" Executed="ExportAsImageFileCommandBinding_Executed" />
+        <CommandBinding Command="Close" Executed="CloseCommandBinding_Executed" />
+
+        <CommandBinding Command="Undo" Executed="UndoCommandBinding_Executed" CanExecute="UndoCommandBinding_CanExecute" />
+        <CommandBinding Command="Redo" Executed="RedoCommandBinding_Executed" CanExecute="RedoCommandBinding_CanExecute" />
+        <CommandBinding Command="Cut" Executed="CutCommandBinding_Executed" CanExecute="CutCommandBinding_CanExecute" />
+        <CommandBinding Command="Copy" Executed="CopyCommandBinding_Executed" CanExecute="CopyCommandBinding_CanExecute" />
+        <CommandBinding Command="Paste" Executed="PasteCommandBinding_Executed" CanExecute="PasteCommandBinding_CanExecute" />
+        <CommandBinding Command="SelectAll" Executed="SelectAllCommandBinding_Executed" />
+        <CommandBinding Command="Delete" Executed="DeleteCommandBinding_Executed" CanExecute="DeleteCommandBinding_CanExecute" />
+
+        <CommandBinding Command="{x:Static ns:MainWindow.ToolsRefreshCommand}" Executed="RefreshCommandBinding_Execute" />
+        <CommandBinding Command="{x:Static ns:MainWindow.ToolsAutoRefreshCommand}" Executed="AutoRefreshCommandBinding_Execute" />
+        
+        <CommandBinding Command="{x:Static ns:MainWindow.HelpAboutCommand}" Executed="AboutCommandBinding_Execute" />
+        <CommandBinding Command="{x:Static ns:MainWindow.HelpGoToHomepageCommand}" Executed="GoToHomepageCommandBinding_Execute" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="New" Key="N" Modifiers="Control" />
+        <KeyBinding Command="Open" Key="O" Modifiers="Control" />
+        <KeyBinding Command="Save" Key="S" Modifiers="Control" />
+        <KeyBinding Command="{x:Static ns:MainWindow.FileCopyAsHatenaSyntaxCommand}" Key="C" Modifiers="Control+Alt" />
+        <KeyBinding Command="{x:Static ns:MainWindow.FileCopyAsImageFileCommand}" Key="C" Modifiers="Control+Shift" />
+        <KeyBinding Command="{x:Static ns:MainWindow.FileExportAsImageFileCommand}" Key="E" Modifiers="Control" />
+        <KeyBinding Command="Close" Key="X" Modifiers="Alt" />
+
+        <KeyBinding Command="Undo" Key="Z" Modifiers="Control" />
+        <KeyBinding Command="Redo" Key="Y" Modifiers="Control" />
+        <KeyBinding Command="Cut" Key="X" Modifiers="Control" />
+        <KeyBinding Command="Copy" Key="C" Modifiers="Control" />
+        <KeyBinding Command="Paste" Key="V" Modifiers="Control" />
+        <KeyBinding Command="SelectAll" Key="A" Modifiers="Control" />
+        <KeyBinding Command="Delete" Key="Delete" />
+
+        <KeyBinding Command="{x:Static ns:MainWindow.ToolsRefreshCommand}" Key="F5" />
+    </Window.InputBindings>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="32" />
+        </Grid.RowDefinitions>
+
+        <Menu x:Name="menuApplication" Grid.Row="0">
+            <MenuItem Header="ファイル(_F)">
+                <MenuItem Header="新規作成" Command="New" InputGestureText="Ctrl+N">
+                    <MenuItem.Icon>
+                        <Image Source="Images/NewDocument.png" Width="16" Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="保存" Command="Save" InputGestureText="Ctrl+S" />
+                <MenuItem Header="名前を指定して保存" Command="SaveAs" />
+                <Separator />
+                <MenuItem Header="はてな記法でコピー" Command="{x:Static ns:MainWindow.FileCopyAsHatenaSyntaxCommand}" InputGestureText="Ctrl+Alt+C" />
+                <MenuItem Header="画像ファイルとしてコピー" Command="{x:Static ns:MainWindow.FileCopyAsImageFileCommand}" InputGestureText="Ctrl+Shift+C" />
+                <MenuItem Header="画像ファイルとして保存" Command="{x:Static ns:MainWindow.FileExportAsImageFileCommand}" InputGestureText="Ctrl+E" />
+                <Separator />
+                <MenuItem Header="閉じる" Command="Close" InputGestureText="Alt+X" />
+            </MenuItem>
+            <MenuItem Header="編集">
+                <MenuItem Header="元に戻す" Command="Undo" InputGestureText="Ctrl+Z" />
+                <MenuItem Header="やり直し" Command="Redo" InputGestureText="Ctrl+Y" />
+                <Separator />
+                <MenuItem Header="切り取り" Command="Cut" InputGestureText="Ctrl+X" />
+                <MenuItem Header="コピー" Command="Copy" InputGestureText="Ctrl+C" />
+                <MenuItem Header="貼り付け" Command="Paste" InputGestureText="Ctrl+V" />
+                <Separator />
+                <MenuItem Header="すべて選択" Command="SelectAll" InputGestureText="Ctrl+A" />
+                <MenuItem Header="削除" Command="Delete" InputGestureText="Delete" />
+            </MenuItem>
+            <MenuItem Header="ツール">
+                <MenuItem Header="更新" Command="{x:Static ns:MainWindow.ToolsRefreshCommand}" InputGestureText="F5" />
+                <MenuItem Header="自動更新" Command="{x:Static ns:MainWindow.ToolsAutoRefreshCommand}" IsCheckable="True" IsChecked="{Binding AutoRefresh}" />
+            </MenuItem>
+            <MenuItem Header="ヘルプ">
+                <MenuItem Header="バージョン情報" Command="{x:Static ns:MainWindow.HelpAboutCommand}" />
+                <MenuItem Header="ホームページを開く" Command="{x:Static ns:MainWindow.HelpGoToHomepageCommand}" />
+            </MenuItem>
+        </Menu>
+        
+        <Image x:Name="imageFormula" Grid.Row="1" 
+               Stretch="None" RenderOptions.EdgeMode="Unspecified">
+            
+        </Image>
+
+        <GridSplitter Margin="0, 0, 0, -2"
+            Height="5"
+            ResizeDirection="Rows"
+            ResizeBehavior="CurrentAndNext"
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Stretch" />
+        
+        <TextBox x:Name="textBoxFormula" Grid.Row="2"
+                 TextChanged="TextBox_TextChanged" 
+                 Margin="10" FontFamily="Consolas" FontSize="14" AcceptsReturn="True" AcceptsTab="True" AutoWordSelection="True" TextWrapping="WrapWithOverflow">
+            
+        </TextBox>
+        
+        <StatusBar Grid.Row="3">
+            <TextBlock x:Name="textBlockError">正常</TextBlock>
+        </StatusBar>
+    </Grid>
+</Window>
